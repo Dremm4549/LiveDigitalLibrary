@@ -49,7 +49,6 @@ namespace MainServer
                 Client state = (Client)_result.AsyncState;
                 int bytesReceived = serverListener.EndReceiveFrom(_result, ref state.EndPoint);
 
-
                 serverListener.BeginReceiveFrom(state.Buffer, 0, state.Buffer.Length, SocketFlags.None, ref state.EndPoint, new AsyncCallback(RecieveCallBack), state);
             }
 

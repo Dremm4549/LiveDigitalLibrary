@@ -6,7 +6,7 @@ namespace DremNet
 {
     class Program
     {
-        static Server server;
+        private static Server server;
         static void Main(string[] args)
         {
             Console.Title = "Server";
@@ -26,8 +26,6 @@ namespace DremNet
             int next_game_tick = Environment.TickCount;
             int sleep_time = 0;
             int loops = 0;
-
-
 
             while(server.IsRunning)
             {
