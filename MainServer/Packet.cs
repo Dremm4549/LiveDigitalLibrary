@@ -22,6 +22,13 @@ namespace ClientTest
             RequestType = _packetType;
         }
 
+        public Packet(int _sequenceNo, PacketType _packetType, short _payloadLength)
+        {
+            SequenceNo = _sequenceNo;
+            PayloadLength = _payloadLength;
+            RequestType = _packetType;
+        }
+
 
         /// <summary>
         ///  In this serialize function we want to pack our buffer using bit converter.
@@ -43,17 +50,21 @@ namespace ClientTest
                 PayloadLength += Constants.PayloadLength + payloadLength;
 
             }
-
         }
 
-        public static void Deserialize(byte[] data)
+        public static Packet Deserialize(byte[] data)
         {
             PacketType type = (PacketType)data[Constants.RequestTypeOffset];
+
             int sequenceNo = BitConverter.ToInt32(data, Constants.SequenceNoOffset);
             short payloadLength = BitConverter.ToInt16(data, Constants.PayloadLengthOffset);
 
-            
-            string msg = System.Text.Encoding.ASCII.GetString(data,Constants.PayloadOffset, payloadLength);
+            if(payloadLength > 0)
+            {
+                string msg = System.Text.Encoding.ASCII.GetString(data,Constants.PayloadOffset, payloadLength);
+            }
+
+            return new Packet(sequenceNo, type, payloadLength);
         }
 
     }

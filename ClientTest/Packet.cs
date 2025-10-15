@@ -9,7 +9,7 @@ namespace ClientTest
     internal class Packet
     {
         public PacketType RequestType { get; private set; }
-        public int SequenceNo { get; init; }
+        public int SequenceNo { get; private set; }
         public byte[] Buffer;
         public int HeaderSize { get; private set; }
         public int PayloadLength { get; private set; }

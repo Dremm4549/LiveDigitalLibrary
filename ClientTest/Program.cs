@@ -14,8 +14,10 @@ namespace ClientTest
         {
             IPEndPoint destIp = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7777);
             Socket s = new Socket(destIp.Address.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
-            Packet p = new Packet(5000000, PacketType.Establish);
-            p.Serialize("Hello");
+
+            
+            Packet p = new Packet(1, PacketType.Establish);
+            p.Serialize(null);
 
            
             s.SendTo(p.Buffer, 0, p.PayloadLength, SocketFlags.None, destIp);

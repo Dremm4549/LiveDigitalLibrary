@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ClientTest;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net.Sockets;
-using System.Net;
-using ClientTest;
 
 namespace MainServer
 {
@@ -16,6 +17,10 @@ namespace MainServer
         public int Port { get; private set; }
 
         private Socket serverListener;
+
+        private ConcurrentQueue<Client> cq = new ConcurrentQueue<Client>();
+
+
 
         public Server(int _port, int _maxUsers)
         {
@@ -50,14 +55,23 @@ namespace MainServer
                 Client state = (Client)_result.AsyncState;
                 int bytesReceived = serverListener.EndReceiveFrom(_result, ref state.EndPoint);
 
-                //Deserialzie
-                Packet.Deserialize(state.Buffer);
+                RequestHandler.cq.Enqueue(state);
 
                 serverListener.BeginReceiveFrom(state.Buffer, 0, state.Buffer.Length, SocketFlags.None, ref state.EndPoint, new AsyncCallback(RecieveCallBack), state);
             }
 
             //serverListener.EndReceiveFrom(_result)
 
+        }
+
+        public static void ProcessMessages()
+        {
+            
+            if(RequestHandler.cq.Count > 0)
+            {
+                Console.WriteLine("We are now going to process messages in the queue");
+                RequestHandler.ProcessRequests();
+            }
         }
 
     }

@@ -33,6 +33,7 @@ namespace DremNet
 
                 while (Environment.TickCount > next_game_tick && loops < Constants.MAX_FRAMESKIP)
                 {
+                    Server.ProcessMessages();
                     next_game_tick += Constants.MS_PER_TICK;
                     
                     loops++;
