@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MainServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,16 +14,15 @@ namespace ClientTest
         public byte[] Buffer;
         public int HeaderSize { get; private set; }
         public int PayloadLength { get; private set; }
-        
+
         public Packet(int _sequenceNo, PacketType _packetType)
         {
             SequenceNo = _sequenceNo;
             Buffer = new byte[Constants.MAX_BUFFER];
             RequestType = _packetType;
-            PayloadLength = 0;
         }
-        
-        
+
+
         /// <summary>
         ///  In this serialize function we want to pack our buffer using bit converter.
         ///  Essentially we are going to reserve 4 bytes for the sequenceNo 1 byte for the RequestType and the remaining bytes will be for the payload
@@ -33,7 +33,7 @@ namespace ClientTest
             BitConverter.GetBytes(SequenceNo).CopyTo(Buffer, Constants.SequenceNoOffset);
             PayloadLength = Constants.RequestTypeSize + Constants.SequenceNoSize;
 
-            if(payload != string.Empty && payload != null)
+            if (payload != string.Empty && payload != null)
             {
                 //We only should only do this if there is a payload to send.
                 short payloadLength = (short)Encoding.ASCII.GetByteCount(payload);
@@ -43,16 +43,17 @@ namespace ClientTest
                 PayloadLength += Constants.PayloadLength + payloadLength;
 
             }
-            
+
         }
 
-        public void Deserialize(byte[] data)
+        public static void Deserialize(byte[] data)
         {
             PacketType type = (PacketType)data[Constants.RequestTypeOffset];
             int sequenceNo = BitConverter.ToInt32(data, Constants.SequenceNoOffset);
             short payloadLength = BitConverter.ToInt16(data, Constants.PayloadLengthOffset);
 
-            string msg = System.Text.Encoding.ASCII.GetString(data,HeaderSize, payloadLength);
+            
+            string msg = System.Text.Encoding.ASCII.GetString(data,Constants.PayloadOffset, payloadLength);
         }
 
     }

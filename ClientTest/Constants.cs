@@ -26,7 +26,5 @@ namespace ClientTest
         //Payload
         public const int PayloadOffset = HeaderSize;
         public const int maxPayloadSize = MAX_BUFFER - HeaderSize;
-
-
     }
 }

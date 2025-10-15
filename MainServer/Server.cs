@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
+using ClientTest;
 
 namespace MainServer
 {
@@ -48,6 +49,9 @@ namespace MainServer
             {
                 Client state = (Client)_result.AsyncState;
                 int bytesReceived = serverListener.EndReceiveFrom(_result, ref state.EndPoint);
+
+                //Deserialzie
+                Packet.Deserialize(state.Buffer);
 
                 serverListener.BeginReceiveFrom(state.Buffer, 0, state.Buffer.Length, SocketFlags.None, ref state.EndPoint, new AsyncCallback(RecieveCallBack), state);
             }
