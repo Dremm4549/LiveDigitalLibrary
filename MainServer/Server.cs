@@ -16,11 +16,9 @@ namespace MainServer
         public int MaxConnections { get; private set; }
         public int Port { get; private set; }
 
-        private Socket serverListener;
+        public static Socket serverListener;
 
         private ConcurrentQueue<Client> cq = new ConcurrentQueue<Client>();
-
-
 
         public Server(int _port, int _maxUsers)
         {
@@ -70,7 +68,8 @@ namespace MainServer
             if(RequestHandler.cq.Count > 0)
             {
                 Console.WriteLine("We are now going to process messages in the queue");
-                RequestHandler.ProcessRequests();
+                RequestHandler.ProcessRequests(serverListener);
+                
             }
         }
 

@@ -14,6 +14,7 @@ namespace ClientTest
         public byte[] Buffer;
         public int HeaderSize { get; private set; }
         public int PayloadLength { get; private set; }
+        public int AckNumber { get; private set; }
 
         public Packet(int _sequenceNo, PacketType _packetType)
         {
@@ -65,6 +66,11 @@ namespace ClientTest
             }
 
             return new Packet(sequenceNo, type, payloadLength);
+        }
+
+        public void SetAck()
+        {
+            AckNumber = SequenceNo;
         }
 
     }

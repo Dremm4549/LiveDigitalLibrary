@@ -11,13 +11,16 @@ namespace MainServer
     internal class ConnectionManager
     {
         public static Dictionary<Guid, Client> ConnectedUsers = new Dictionary<Guid, Client>();
-        public static void InitalizeClient(PacketType _packetType, Client _client)
+        public static void InitalizeClient(Client _client)
         {
-            if(_packetType == PacketType.Establish)
+
+            Guid newUserId = Guid.NewGuid();
+
+            if(!ConnectedUsers.ContainsKey(newUserId))
             {
-                Guid newUserId = Guid.NewGuid();
                 ConnectedUsers.Add(newUserId, _client);
             }
+            
         }
     }
 }
